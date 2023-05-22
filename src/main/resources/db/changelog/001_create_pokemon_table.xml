@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+           http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+
+    <changeSet id="create_pokemon_table" author="quinn">
+        <createTable tableName="pokemon">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-trainer-table" author="quinn">
+        <createTable tableName="Trainer">
+            <column name="trainer_id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)"></column>
+            <column name="email" type="varchar(500)"></column>
+            <column name="password" type="varchar(255)"></column>
+        </createTable>
+
+    </changeSet>
+    <changeSet id="add-poketrainer-table" author="quinn">
+        <createTable tableName="poke_trainer">
+            <column name="poke_trainer_id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="poke_id" type="bigint"></column>
+            <column name="trainer_id" type="bigint"></column>
+        </createTable>
+    </changeSet>
+
+<changeSet id="addForeignkey" author="Quinn">
+    <addForeignKeyConstraint baseTableName="poke_trainer" baseColumnNames="poke_id" constraintName="fk_poke_trainer_poke_id"
+                             referencedTableName="pokemon" referencedColumnNames="poke_id" />
+
+    <addForeignKeyConstraint baseTableName="poke_trainer" baseColumnNames="trainer_id" constraintName="fk_poke_trainer_trainer_id"
+                             referencedTableName="Trainer" referencedColumnNames="trainer_id" />
+</changeSet>
+
+<!--Add stats seperate and check if caperuring pokemon works-->
+    <changeSet id="add-stats" author="Quinn">
+
+    </changeSet>
+
+</databaseChangeLog>

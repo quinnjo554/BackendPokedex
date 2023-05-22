@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+           http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+
+    <changeSet id="add-poketrainer-table" author="quinn">
+        <createTable tableName="poketrainer">
+            <column name="poke_trainer_id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="poke_id" type="bigint"></column>
+            <column name="trainer_id" type="bigint"></column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
