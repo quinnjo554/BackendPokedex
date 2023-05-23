@@ -6,7 +6,7 @@ xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
 xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
 
-<include relativeToChangelogFile="true" file="changelog/020_remove_isCaptured.xml"/>
+<include relativeToChangelogFile="true" file="changelog/032_add_egg_and_abillities_link.xml"/>
 
 
 </databaseChangeLog>

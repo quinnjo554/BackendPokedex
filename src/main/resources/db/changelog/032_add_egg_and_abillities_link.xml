@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+<changeSet id="createTypeTable" author="Quinn">
+    <createTable tableName="pokemon_egg_group">
+        <column name="pokemon_id" type="INTEGER">
+            <constraints nullable="false" primaryKey="true"/>
+        </column>
+        <column name="egg_group_id" type="INTEGER">
+            <constraints nullable="false" primaryKey="true"/>
+        </column>
+    </createTable>
+    <addForeignKeyConstraint baseTableName="pokemon_egg_group"
+                             baseColumnNames="pokemon_id"
+                             referencedTableName="pokemon"
+                             referencedColumnNames="poke_id"
+                             constraintName="fk_pokemon_egg_group_pokemon"
+                             onDelete="CASCADE"
+                             onUpdate="CASCADE"/>
+    <addForeignKeyConstraint baseTableName="pokemon_egg_group"
+                             baseColumnNames="egg_group_id"
+                             referencedTableName="egg_group"
+                             referencedColumnNames="egg_group_id"
+                             constraintName="fk_pokemon_egg_group_egg_group"
+                             onDelete="CASCADE"
+                             onUpdate="CASCADE"/>
+
+    <!-- Add the pokemon_ability junction table -->
+    <createTable tableName="pokemon_ability">
+        <column name="pokemon_id" type="INTEGER">
+            <constraints nullable="false" primaryKey="true"/>
+        </column>
+        <column name="ability_id" type="INTEGER">
+            <constraints nullable="false" primaryKey="true"/>
+        </column>
+    </createTable>
+    <addForeignKeyConstraint baseTableName="pokemon_ability"
+                             baseColumnNames="pokemon_id"
+                             referencedTableName="pokemon"
+                             referencedColumnNames="poke_id"
+                             constraintName="fk_pokemon_ability_pokemon"
+                             onDelete="CASCADE"
+                             onUpdate="CASCADE"/>
+    <addForeignKeyConstraint baseTableName="pokemon_ability"
+                             baseColumnNames="ability_id"
+                             referencedTableName="ability"
+                             referencedColumnNames="ability_id"
+                             constraintName="fk_pokemon_ability_ability"
+                             onDelete="CASCADE"
+                             onUpdate="CASCADE"/>
+</changeSet>
+
+</databaseChangeLog>
