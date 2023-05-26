@@ -96,7 +96,7 @@ data class Pokemon(
         @Column(name = "description")
         var description: String = "",
 
-        @ManyToMany(fetch = FetchType.EAGER)
+        @ManyToMany(fetch = FetchType.EAGER) //load with rest of the fields
         @JoinTable(
                 name = "pokemon_ability",
                 joinColumns = [JoinColumn(name = "pokemon_id")],

@@ -19,27 +19,45 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
 //chat gpt for questions on the pokemon
-
-
+//guess that pokemon based on description
+//how do we make a cors whitelist
 @RestController
 @RequestMapping("/trainer")
 class TrainerController(private val trainerRepo: TrainerRepo,private val pokeTrainerRepo: PokeTrainerRepo,private val pokemonRepository: PokemonRepository) {
-    /**TODO
-     * add to get repo
-     * add trainer table and get that set up
-     * check requirements
-     */
 
-    //add trainer to db
+
+
+    @PostMapping("/login")
+    fun signIn(@RequestBody trainer: Trainer): ResponseEntity<String> {
+        val email = trainer.email
+        val password = trainer.password
+        val authenticated = authenticate(email, password)
+
+        if (authenticated) {
+            return ResponseEntity.ok("Authentication successful")
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed")
+        }
+    }
+    private fun authenticate(email: String, password: String): Boolean {
+        val trainer = trainerRepo.findByEmail(email)
+        return trainer != null && trainer.password == password
+    }
+
+    /**
+     * @param trainer
+     * adds trainer with name, email, and password
+     */
     @PostMapping("/post")
     fun createTrainer(@RequestBody trainer: Trainer): ResponseEntity<String> {
         //get the email
         val existingTrainer = trainerRepo.findByEmail(trainer.email)
         return if (existingTrainer != null) {
-            //error if email is already in the data base
+            //if email is already in the database
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already exists")
         } else {
             val savedTrainer = trainerRepo.save(trainer)
@@ -47,23 +65,31 @@ class TrainerController(private val trainerRepo: TrainerRepo,private val pokeTra
         }
     }
 
-    //delete a trainer by id
+    /**
+     * @param id
+     * @return ResponseEntity.ok if succsess NOT FOUND otherwise
+     * Deletes trainer with specified id
+     */
     @DeleteMapping("/delete/{id}")
     fun deleteTrainer(@PathVariable id: Long): ResponseEntity<String> {
         val trainer = trainerRepo.findById(id)
         if (trainer.isPresent) {
-            //delete if exist
             trainerRepo.delete(trainer.get())
             return ResponseEntity.ok("Trainer successfully deleted")
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Trainer not found.")
     }
 
+
+    /**
+     * @param email
+     * @return ResponseEntity.ok if succsess NOT FOUND otherwise
+     * Deletes trainer with specified email
+     */
     @DeleteMapping("/deleteByEmail/")
     fun deleteTrainerByEmail(@RequestParam email: String): ResponseEntity<String> {
         val trainer = trainerRepo.findByEmail(email)
         if (trainer != null) {
-            // Delete if it exists
             trainerRepo.delete(trainer)
             return ResponseEntity.ok("Trainer successfully deleted")
         }
@@ -71,41 +97,43 @@ class TrainerController(private val trainerRepo: TrainerRepo,private val pokeTra
     }
 
 
-
-    //get a specific trainer
+    /**
+     * Find a trainer by Id
+     */
     @GetMapping("/{id}")
     fun getTrainerByID(@PathVariable id: Long): ResponseEntity<Trainer?> {
         val trainer = trainerRepo.findById(id).orElse(null)
-        return ResponseEntity(trainer, HttpStatus.OK)
+        if(trainer != null) {
+            return ResponseEntity(trainer, HttpStatus.OK)
+        }
+        return ResponseEntity(null, HttpStatus.NOT_FOUND)
     }
 
     @GetMapping("/email")
     fun getTrainerByEmail(@RequestParam email: String): ResponseEntity<Trainer?> {
         val trainer = trainerRepo.findByEmail(email)
-        return ResponseEntity(trainer, HttpStatus.OK)
-    }
-
-    //get all trainers
-    @GetMapping("/all")
-    fun getTrainer(
-            @RequestParam(defaultValue = "0") page: Int,
-            @RequestParam(defaultValue = "10") size: Int,
-            @RequestParam(defaultValue = "id") sortBy: String,
-            @RequestParam(defaultValue = "asc") sortOrder: String
-    ): ResponseEntity<Page<Trainer>> {
-        val pageable: Pageable = PageRequest.of(page, size, Sort.Direction.fromString(sortOrder), sortBy)
-        val trainerList = trainerRepo.findAll(pageable)
-        return ResponseEntity(trainerList, HttpStatus.OK)
+        if(trainer != null) {
+            return ResponseEntity(trainer, HttpStatus.OK)
+        }
+        return ResponseEntity(null, HttpStatus.NOT_FOUND)
     }
 
 
-
-    //get info about a specific pokemon a trainer caught
     @GetMapping("/{id}/captured-pokemon")
-    fun getCapturedPokemon(@PathVariable id: Int): ResponseEntity<List<Pokemon>> {
+    fun getCapturedPokemon(@PathVariable id: Int,
+                           @RequestParam(defaultValue = "0") page: Int,
+                           @RequestParam(defaultValue = "553") size: Int,
+                           @RequestParam(defaultValue = "id") sortBy: String,
+                           @RequestParam(defaultValue = "asc") sortOrder: String
+    ): ResponseEntity<Any> {
         val capturedPokemonIds: List<Int> = pokeTrainerRepo.findByTrainerId(id)
-        val capturedPokemon: List<Pokemon> = pokemonRepository.findAllById(capturedPokemonIds)
-        return ResponseEntity.ok(capturedPokemon)
+        val pageable: Pageable = PageRequest.of(page, size, Sort.Direction.fromString(sortOrder), sortBy)
+        return if (capturedPokemonIds.isNotEmpty()) {
+            val capturedPokemon: Page<Pokemon> = pokemonRepository.findAllByIdIn(capturedPokemonIds,pageable)
+            ResponseEntity.ok(capturedPokemon)
+        } else {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).body("No trainer with that id or non captured")
+        }
     }
 
     //add captured pokemon (add pagination)
