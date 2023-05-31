@@ -33,9 +33,14 @@ class PokemonController(private val pokemonRepository: PokemonRepository, privat
 
     //make a game where you guess what pokemon it is based on description
     @GetMapping("/name/{name}")
-    fun getPokemonByName(@PathVariable name: String):ResponseEntity<Pokemon?> {
-        name
-        val pokemon = pokemonRepository.findByName(name)
+    fun getPokemonByName(@PathVariable name: String,
+                         @RequestParam(defaultValue = "0") page: Int,
+                         @RequestParam(defaultValue = "500") size: Int,
+                         @RequestParam(defaultValue = "id") sortBy: String,
+                         @RequestParam(defaultValue = "asc") sortOrder: String
+    ):ResponseEntity<Page<Pokemon?>> {
+        val pageable: Pageable = PageRequest.of(page, size, Sort.Direction.fromString(sortOrder), sortBy)
+        val pokemon = pokemonRepository.findByName(name,pageable)
         if(pokemon != null) {
             return ResponseEntity(pokemon, HttpStatus.OK)
         }
@@ -71,7 +76,6 @@ class PokemonController(private val pokemonRepository: PokemonRepository, privat
             val pokemon = pokemonRepository.findAllByTypesContainingOrderByTypes(typeEntity, pageable)
             return ResponseEntity(pokemon, HttpStatus.OK)
         }
-
         return ResponseEntity(HttpStatus.NOT_FOUND)
     }
 

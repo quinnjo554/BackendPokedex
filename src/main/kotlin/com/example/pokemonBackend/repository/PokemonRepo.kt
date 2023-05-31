@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository
 interface PokemonRepository : JpaRepository<Pokemon, Int> {
     fun findAllByTypesContainingOrderByTypes(type: Type?,pageable: Pageable): Page<Pokemon?>
     fun findAllByAbilitiesContainingOrderByAbilities(ability: Abillity?,pageable: Pageable): Page<Pokemon?>
-    fun findByName(name:String) : Pokemon?
+    fun findByName(name:String,pageable: Pageable) : Page<Pokemon?>
     fun findAllByEggGroupsContainingOrderByEggGroups(eggGroup: EggGroup?,pageable: Pageable): Page<Pokemon?>
     fun findAllByIdIn(ids:List<Int>,pageable:Pageable): Page<Pokemon>
 

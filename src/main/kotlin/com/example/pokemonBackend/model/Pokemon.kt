@@ -96,6 +96,7 @@ data class Pokemon(
         @Column(name = "description")
         var description: String = "",
 
+        //got online
         @ManyToMany(fetch = FetchType.EAGER) //load with rest of the fields
         @JoinTable(
                 name = "pokemon_ability",
