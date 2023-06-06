@@ -3,7 +3,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
 
-    <changeSet id="createTypeTable" author="Quinn">
+    <changeSet id="create_types_table" author="Quinn">
         <createTable tableName="types">
             <column name="type_id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>

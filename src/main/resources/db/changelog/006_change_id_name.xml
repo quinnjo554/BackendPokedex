@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
 
-    <changeSet id="replacepokemon" author="Quinn">
+    <changeSet id="change_id" author="Quinn">
         <renameColumn tableName="Pokemon" oldColumnName="id" newColumnName="poke_id"></renameColumn>
         <renameColumn tableName="Pokemon" oldColumnName="name" newColumnName="poke_name"></renameColumn>
 

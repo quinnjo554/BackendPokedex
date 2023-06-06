@@ -4,7 +4,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
-    <changeSet id="add_eggGroup_table" author="Quinn">
+    <changeSet id="add_types_table" author="Quinn">
         <createTable tableName="ability">
             <column name="ability_id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>

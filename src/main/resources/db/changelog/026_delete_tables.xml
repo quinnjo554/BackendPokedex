@@ -4,7 +4,7 @@ xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
-<changeSet id="add_eggGroup_table" author="Quinn">
+<changeSet id="remove_Types_and_type" author="Quinn">
     <delete tableName="Types"></delete>
     <delete tableName="type"></delete>
 </changeSet>

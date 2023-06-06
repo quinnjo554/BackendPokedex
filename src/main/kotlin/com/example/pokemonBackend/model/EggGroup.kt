@@ -1,7 +1,6 @@
 package com.example.pokemonBackend.model
 
 import jakarta.persistence.*
-//start on id of 3
 @Entity
 @Table(name = "egg_group")
 data class EggGroup(

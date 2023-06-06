@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
 
-    <changeSet id="add_pokemon_fields" author="quinn">
+    <changeSet id="add_trainer_table" author="quinn">
         <createTable tableName="trainer">
             <column name="trainer_id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>

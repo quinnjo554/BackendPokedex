@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
 
-    <changeSet id="add-poketrainer-col" author="quinn">
+    <changeSet id="add_is_captured" author="quinn">
         <addColumn tableName="poketrainer">
             <column name="is_captured" type="boolean"></column>
         </addColumn>

@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
 
-    <changeSet id="removeIsCaptured" author="Quinn">
+    <changeSet id="remove_isCaptured" author="Quinn">
         <dropColumn tableName="poke_trainer" columnName="isCaptured"></dropColumn>
     </changeSet>
 

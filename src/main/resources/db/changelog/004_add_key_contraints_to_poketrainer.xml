@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
 
-    <changeSet id="addForeignkey" author="Quinn">
+    <changeSet id="add_Foreignkey_to_poketrainer" author="Quinn">
         <addForeignKeyConstraint baseTableName="poketrainer" baseColumnNames="poke_id" constraintName="fk_poke_trainer_poke_id"
                                  referencedTableName="pokemon" referencedColumnNames="poke_id" />
 
