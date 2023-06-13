@@ -1,120 +1,77 @@
-package com.example.pokemonBackend.Controllers
+package com.example.pokemonBackend.controllers
 
-import com.example.pokemonBackend.Exceptions.PokemonNotFoundException
-import com.example.pokemonBackend.Service.PokemonService
 import com.example.pokemonBackend.model.Pokemon
 import com.example.pokemonBackend.repository.*
+import com.example.pokemonBackend.service.PokemonService
 import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.*
-
-//at the next intern meet up ask about the future of programing
-//also about grpc and protobuf and how they differ from rest api's
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/pokemon")
 class PokemonController(private val pokemonService: PokemonService) {
 
     @GetMapping("/{id}")
-    fun getPokemon(@PathVariable id: Int): ResponseEntity<Pokemon?> {
-        try {
-            val pokemon = pokemonService.getPokemon(id)
-            return ResponseEntity(pokemon, HttpStatus.OK)
-        }
-        catch (exception:PokemonNotFoundException){
-            ResponseEntity(Pokemon(),HttpStatus.NOT_FOUND)
-        }
-       return ResponseEntity(Pokemon(),HttpStatus.BAD_REQUEST)
+    fun getPokemon(@PathVariable id: Int): ResponseEntity<Pokemon> {
+        val pokemon = pokemonService.getPokemon(id)
+        return ResponseEntity(pokemon, HttpStatus.OK)
     }
 
     @GetMapping("/name/{name}")
     fun getPokemonByName(
-        @PathVariable name: String,
+            @PathVariable name: String,
     ): ResponseEntity<Pokemon?> {
-        try {
-             val pokePage =pokemonService.getPokemonByName(name)
-            return ResponseEntity(pokePage,HttpStatus.OK)
-        }
-        catch(exception:PokemonNotFoundException){
-            return ResponseEntity(Pokemon(),HttpStatus.NOT_FOUND)
-        }
-
+        val pokePage = pokemonService.getPokemonByName(name)
+        return ResponseEntity(pokePage, HttpStatus.OK)
     }
 
     @GetMapping("/all")
     fun getAllPokemon(
-            @RequestParam(defaultValue = "0") page: Int,
-            @RequestParam(defaultValue = "500") size: Int,
-            @RequestParam(defaultValue = "id") sortBy: String,
-            @RequestParam(defaultValue = "asc") sortOrder: String
+            @PageableDefault(size = 10, sort = ["id"], direction = Sort.Direction.ASC) pageable: Pageable
     ): ResponseEntity<Page<Pokemon>> {
-        return try {
-            val pokemonPage = pokemonService.getAllPokemon(page, size, sortBy, sortOrder)
-            ResponseEntity(pokemonPage, HttpStatus.OK)
-        } catch (e: PokemonNotFoundException) {
-            ResponseEntity(HttpStatus.NOT_FOUND)
-        }
+        val pokemonPage = pokemonService.getAllPokemon(pageable)
+        return ResponseEntity(pokemonPage, HttpStatus.OK)
     }
 
-    @GetMapping("/byType/{type}")
-    fun getRandomPokemonByType(
+    @GetMapping("/by-type/{type}")
+    fun getPokemonByType(
             @PathVariable type: String,
-            @RequestParam(defaultValue = "0") page: Int,
-            @RequestParam(defaultValue = "500") size: Int,
-            @RequestParam(defaultValue = "id") sortBy: String,
-            @RequestParam(defaultValue = "asc") sortOrder: String
-    ): ResponseEntity<Page<Pokemon?>> {
-        return try {
-            val pokemonPage = pokemonService.getPokemonByType(type, page, size, sortBy, sortOrder)
-            ResponseEntity(pokemonPage, HttpStatus.OK)
-        } catch (e: PokemonNotFoundException) {
-            ResponseEntity(HttpStatus.NOT_FOUND)
-        }
+            @PageableDefault(size = 10, sort = ["id"], direction = Sort.Direction.ASC) pageable: Pageable
+    ): ResponseEntity<Page<Pokemon>> {
+        val pokemonPage = pokemonService.getPokemonByType(type, pageable)
+        return ResponseEntity(pokemonPage, HttpStatus.OK)
     }
 
-    @GetMapping("/byAbility/{ability}")
-    fun getRandomPokemonByAbility(
+    @GetMapping("/by-ability/{ability}")
+    fun getPokemonByAbility(
             @PathVariable ability: String,
-            @RequestParam(defaultValue = "0") page: Int,
-            @RequestParam(defaultValue = "500") size: Int,
-            @RequestParam(defaultValue = "id") sortBy: String,
-            @RequestParam(defaultValue = "asc") sortOrder: String
-    ): ResponseEntity<Page<Pokemon?>> {
-        return try {
-            val pokemonPage = pokemonService.getRandomPokemonByAbility(ability, page, size, sortBy, sortOrder)
-            ResponseEntity(pokemonPage, HttpStatus.OK)
-        } catch (e: PokemonNotFoundException) {
-            ResponseEntity(HttpStatus.NOT_FOUND)
-        }
+            @PageableDefault(size = 10, sort = ["id"], direction = Sort.Direction.ASC) pageable: Pageable
+    ): ResponseEntity<Page<Pokemon>> {
+        val pokemonPage = pokemonService.getPokemonByAbility(ability, pageable)
+        return ResponseEntity(pokemonPage, HttpStatus.OK)
     }
 
-    @GetMapping("/byEggGroup/{eggGroup}")
-    fun getRandomPokemonByEggGroup(
+    @GetMapping("/by-egg-group/{eggGroup}")
+    fun getPokemonByEggGroup(
             @PathVariable eggGroup: String,
-            @RequestParam(defaultValue = "0") page: Int,
-            @RequestParam(defaultValue = "500") size: Int,
-            @RequestParam(defaultValue = "id") sortBy: String,
-            @RequestParam(defaultValue = "asc") sortOrder: String
-    ): ResponseEntity<Page<Pokemon?>> {
-        return try {
-            val pokemonPage = pokemonService.getRandomPokemonByEggGroup(eggGroup, page, size, sortBy, sortOrder)
-            ResponseEntity(pokemonPage, HttpStatus.OK)
-        } catch (e: PokemonNotFoundException) {
-            ResponseEntity(HttpStatus.NOT_FOUND)
-        }
+            @PageableDefault(size = 10, sort = ["id"], direction = Sort.Direction.ASC) pageable: Pageable
+    ): ResponseEntity<Page<Pokemon>> {
+        val pokemonPage = pokemonService.getPokemonByEggGroup(eggGroup, pageable)
+        return ResponseEntity(pokemonPage, HttpStatus.OK)
     }
 
     @GetMapping("/random")
-    fun getRandomPokemon(): ResponseEntity<Pokemon?> {
-        return try {
-            val pokemon = pokemonService.getRandomPokemon()
-            ResponseEntity(pokemon, HttpStatus.OK)
-        } catch (e: PokemonNotFoundException) {
-            ResponseEntity(HttpStatus.NOT_FOUND)
-        }
+    fun getRandomPokemon(): ResponseEntity<Pokemon> {
+        val pokemon = pokemonService.getRandomPokemon()
+        return ResponseEntity(pokemon, HttpStatus.OK)
     }
-
 }
 
 

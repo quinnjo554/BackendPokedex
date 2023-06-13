@@ -1,83 +1,75 @@
-package com.example.pokemonBackend.Service
+package com.example.pokemonBackend.service
 
-import com.example.pokemonBackend.Exceptions.PokemonNotFoundException
+import com.example.pokemonBackend.exceptions.AbilityNotFoundException
+import com.example.pokemonBackend.exceptions.PokemonNotFoundException
+import com.example.pokemonBackend.exceptions.TypeNotFoundException
 import com.example.pokemonBackend.model.Pokemon
-import com.example.pokemonBackend.repository.*
+import com.example.pokemonBackend.repository.AbilityRepo
+import com.example.pokemonBackend.repository.EggGroupRepo
+import com.example.pokemonBackend.repository.PokemonRepo
+import com.example.pokemonBackend.repository.TypeRepo
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
+import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Service
 import kotlin.random.Random
 
 @Service
-class PokemonService(private val pokemonRepository: PokemonRepo,
-                     private val typeRepository: TypeRepo,
-                     private val abilityRepo: AbilityRepo,
-                     private val eggGroupRepo: EggGroupRepo
+class PokemonService(
+        private val pokemonRepository: PokemonRepo,
+        private val typeRepository: TypeRepo,
+        private val abilityRepo: AbilityRepo,
+        private val eggGroupRepo: EggGroupRepo,
 ) {
-    companion object {
-        const val MAX_POKEMON = 553
-    }
-    fun getPokemon(id: Int): Pokemon? {
-        return pokemonRepository.findById(id).orElseThrow(){
-            PokemonNotFoundException("Pokemon not found")
+
+    fun getPokemon(id: Int): Pokemon {
+        return pokemonRepository.findById(id).orElseThrow {
+            PokemonNotFoundException()
         }
     }
 
-    fun getPokemonByName(name: String, ): Pokemon? {
-        return pokemonRepository.findByName(name) ?: throw PokemonNotFoundException("Pokemon with name: $name not found")
+    fun getPokemonByName(name: String): Pokemon {
+        return pokemonRepository.findByName(name) ?: throw PokemonNotFoundException()
     }
 
-    fun getAllPokemon(page: Int,
-                      size: Int,
-                      sortBy: String,
-                      sortOrder: String): Page<Pokemon> {
-        val pageable: Pageable = PageRequest.of(page, size, Sort.Direction.fromString(sortOrder), sortBy)
+    fun getAllPokemon(
+            @PageableDefault(size = 10, sort = ["id"], direction = Sort.Direction.ASC) pageable: Pageable,
+    ): Page<Pokemon> {
         return pokemonRepository.findAll(pageable)
     }
 
     fun getPokemonByType(
             type: String,
-            page: Int,
-            size: Int,
-            sortBy: String,
-            sortOrder: String
-    ): Page<Pokemon?> {
-        val pageable: Pageable = PageRequest.of(page, size, Sort.Direction.fromString(sortOrder), sortBy)
-        val typeEntity = typeRepository.findByName(type) ?: throw PokemonNotFoundException("Type '$type' not found") // Throw exception if type is not found
+            @PageableDefault(size = 10, sort = ["id"], direction = Sort.Direction.ASC) pageable: Pageable,
+    ): Page<Pokemon> {
+        val typeEntity = typeRepository.findByName(type) ?: throw TypeNotFoundException(type)
         return pokemonRepository.findAllByTypesContainingOrderByTypes(typeEntity, pageable)
     }
 
-    fun getRandomPokemonByAbility(
+    fun getPokemonByAbility(
             ability: String,
-            page: Int,
-            size: Int,
-            sortBy: String,
-            sortOrder: String
-    ): Page<Pokemon?> {
-        val pageable: Pageable = PageRequest.of(page, size, Sort.Direction.fromString(sortOrder), sortBy)
-        val abilityEntity = abilityRepo.findByName(ability) ?: throw PokemonNotFoundException("Pokemon with $ability not found")
+            @PageableDefault(size = 10, sort = ["id"], direction = Sort.Direction.ASC) pageable: Pageable,
+    ): Page<Pokemon> {
+        val abilityEntity = abilityRepo.findByName(ability)
+                ?: throw AbilityNotFoundException(ability)
         return pokemonRepository.findAllByAbilitiesContainingOrderByAbilities(abilityEntity, pageable)
     }
 
-    fun getRandomPokemonByEggGroup(
+    fun getPokemonByEggGroup(
             eggGroup: String,
-            page: Int,
-            size: Int,
-            sortBy: String,
-            sortOrder: String
-    ): Page<Pokemon?> {
-        val pageable: Pageable = PageRequest.of(page, size, Sort.Direction.fromString(sortOrder), sortBy)
-        val eggGroupEntity = eggGroupRepo.findByName(eggGroup) ?: throw PokemonNotFoundException("Pokemon with egg group $eggGroup not found")
+            @PageableDefault(size = 10, sort = ["id"], direction = Sort.Direction.ASC) pageable: Pageable,
+    ): Page<Pokemon> {
+        val eggGroupEntity = eggGroupRepo.findByName(eggGroup)
+                ?: throw PokemonNotFoundException("Pokemon with egg group $eggGroup not found")
         return pokemonRepository.findAllByEggGroupsContainingOrderByEggGroups(eggGroupEntity, pageable)
     }
 
-    fun getRandomPokemon(): Pokemon? {
-        val randomInt = Random.nextInt(1, MAX_POKEMON)
-        return pokemonRepository.findById(randomInt).orElseThrow(){
+    fun getRandomPokemon(): Pokemon {
+        val maxPokemon = pokemonRepository.findAll().count()
+        val randomInt = Random.nextInt(1, maxPokemon)
+        return pokemonRepository.findById(randomInt).orElseThrow() {
             throw PokemonNotFoundException("Could not get Pokemon")
         }
     }
 }
-

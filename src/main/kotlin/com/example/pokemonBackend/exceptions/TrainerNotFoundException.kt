@@ -1,5 +1,3 @@
-package com.example.pokemonBackend.Exceptions
+package com.example.pokemonBackend.exceptions
 
-import org.springframework.http.HttpStatus
-
-class TrainerNotFoundException(message: String) : RuntimeException(message)
+class TrainerNotFoundException(message: String = "Trainer Not Found") : RuntimeException(message)

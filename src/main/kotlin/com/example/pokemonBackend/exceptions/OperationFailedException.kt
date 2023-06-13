@@ -1,3 +1,3 @@
-package com.example.pokemonBackend.Exceptions
+package com.example.pokemonBackend.exceptions
 
-class OperationFailedException(message: String) : RuntimeException(message)
+class OperationFailedException(message: String = "Operation failed") : RuntimeException(message)

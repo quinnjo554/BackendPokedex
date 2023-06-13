@@ -6,7 +6,7 @@
            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
 
     <changeSet id="delete_poketrainer" author="Quinn">
-        <delete tableName="poketrainer"></delete>
+        <dropTable tableName="poketrainer"></dropTable>
     </changeSet>
 
 </databaseChangeLog>

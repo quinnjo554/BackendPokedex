@@ -1,7 +1,7 @@
 package com.example.pokemonBackend.PokemonService
 
-import com.example.pokemonBackend.Exceptions.PokemonNotFoundException
-import com.example.pokemonBackend.Service.PokemonService
+import com.example.pokemonBackend.exceptions.PokemonNotFoundException
+import com.example.pokemonBackend.service.PokemonService
 import com.example.pokemonBackend.model.Pokemon
 import com.example.pokemonBackend.model.Type
 import com.example.pokemonBackend.repository.AbilityRepo

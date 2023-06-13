@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface TypeRepo : JpaRepository<Type, Long> {
-    fun findByName(name:String):Type?
+    fun findByName(name: String): Type?
 }

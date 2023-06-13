@@ -6,8 +6,8 @@
            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
 
     <changeSet id="delete_pokemon_DB" author="Quinn">
-      <delete tableName="Pokemon"></delete>
-        <delete tableName="pokemon"></delete>
+      <dropTable tableName="Pokemon"></dropTable>
+        <dropTable tableName="pokemon"></dropTable>
 
     </changeSet>
 
