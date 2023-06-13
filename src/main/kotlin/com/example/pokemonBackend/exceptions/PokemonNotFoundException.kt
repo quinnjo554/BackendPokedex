@@ -1,3 +1,3 @@
-package com.example.pokemonBackend.Exceptions
+package com.example.pokemonBackend.exceptions
 
-class PokemonNotFoundException(message: String) : RuntimeException(message)
+class PokemonNotFoundException(message: String = "Pokemon Not Found") : RuntimeException(message)

@@ -1,4 +1,6 @@
 package com.example.pokemonBackend.request
 
-class TrainerRequest {
-}
+data class TrainerRequest(
+        val email: String,
+        val password: String,
+)

@@ -1,4 +1,5 @@
-package com.example.pokemonBackend.Security
+package com.example.pokemonBackend.security
+
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.cors.CorsConfiguration
@@ -9,14 +10,12 @@ import org.springframework.web.filter.CorsFilter
 class CorsConfig {
     @Bean
     fun corsFilter(): CorsFilter {
-
         val source = UrlBasedCorsConfigurationSource()
         val corsConfig = CorsConfiguration()
-        corsConfig.allowedOrigins = listOf("http://localhost:5173/") // Add your whitelist of allowed origins
+        corsConfig.allowedOrigins = listOf("http://localhost:5173/", "http://localhost:3000/")
         corsConfig.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
-        corsConfig.allowCredentials = true // Set this to true if you want to allow credentials (e.g., cookies) to be included in CORS requests
+        corsConfig.allowCredentials = true
         source.registerCorsConfiguration("/**", corsConfig)
         return CorsFilter(source)
-
     }
 }

@@ -1,4 +1,4 @@
-package com.example.pokemonBackend.Exceptions
+package com.example.pokemonBackend.exceptions
 
-class AlreadyExistsException(message: String) : RuntimeException(message)
+class AlreadyExistsException(message: String = "Already Exists") : RuntimeException(message)
 

@@ -1,4 +1,6 @@
-package com.example.pokemonBackend.Security
+package com.example.pokemonBackend.security
+
 
 class SecurityConfig {
+
 }
